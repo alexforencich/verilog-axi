@@ -299,14 +299,14 @@ if (FIFO_DELAY) begin
             hold_reg <= 1'b1;
             m_axi_awvalid_reg <= 1'b0;
             s_axi_awready_reg <= 1'b0;
+            count_reg <= 9'd0 ;
         end else begin
             state_reg <= state_next;
             hold_reg <= hold_next;
             m_axi_awvalid_reg <= m_axi_awvalid_next;
             s_axi_awready_reg <= s_axi_awready_next;
+            count_reg <= count_next;
         end
-
-        count_reg <= count_next;
 
         m_axi_awid_reg <= m_axi_awid_next;
         m_axi_awaddr_reg <= m_axi_awaddr_next;
