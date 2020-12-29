@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 
 Copyright (c) 2020 Alex Forencich
@@ -189,6 +190,13 @@ rtl_dir = os.path.abspath(os.path.join(tests_dir, '..', '..', 'rtl'))
 
 @pytest.mark.parametrize("data_width", [8, 16, 32])
 def test_axil_ram(request, data_width):
+    run_test(
+        parameters={'DATA_WIDTH': data_width},
+        sim_build="sim_build_"+request.node.name.replace('[', '-').replace(']', ''),
+    )
+
+
+def run_test(parameters=None, sim_build="sim_build", waves=None, force_compile=False):
     dut = "axil_ram"
     module = os.path.splitext(os.path.basename(__file__))[0]
     toplevel = dut
@@ -197,17 +205,18 @@ def test_axil_ram(request, data_width):
         os.path.join(rtl_dir, f"{dut}.v"),
     ]
 
-    parameters = {}
+    if parameters is None:
+        parameters = {}
+    parameters = {k.upper(): v for k, v in parameters.items() if v is not None}
 
-    parameters['DATA_WIDTH'] = data_width
-    parameters['ADDR_WIDTH'] = 16
-    parameters['STRB_WIDTH'] = parameters['DATA_WIDTH'] // 8
-    parameters['PIPELINE_OUTPUT'] = 0
+    parameters.setdefault('DATA_WIDTH', 32)
+    parameters.setdefault('ADDR_WIDTH', 16)
+    parameters.setdefault('STRB_WIDTH', parameters['DATA_WIDTH'] // 8)
+    parameters['PIPELINE_OUTPUT'] = int(parameters.get('PIPELINE_OUTPUT', 0))
 
     extra_env = {f'PARAM_{k}': str(v) for k, v in parameters.items()}
 
-    sim_build = os.path.join(tests_dir,
-        "sim_build_"+request.node.name.replace('[', '-').replace(']', ''))
+    sim_build = os.path.join(tests_dir, sim_build)
 
     cocotb_test.simulator.run(
         python_search=[tests_dir],
@@ -217,4 +226,60 @@ def test_axil_ram(request, data_width):
         parameters=parameters,
         sim_build=sim_build,
         extra_env=extra_env,
+        force_compile=force_compile,
+        waves=waves,
     )
+
+
+if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--data_width', type=int, default=32)
+    parser.add_argument('--addr_width', type=int, default=16)
+    parser.add_argument('--strb_width', type=int)
+    parser.add_argument('--pipeline_output', type=bool, default=False)
+    parser.add_argument('--waves', type=bool)
+    parser.add_argument('--sim_build', type=str, default="sim_build")
+    parser.add_argument('--force_compile', type=bool, default=True)
+    parser.add_argument('--clean', action='store_true')
+
+    args = vars(parser.parse_args())
+
+    if args.pop("clean"):
+        import glob
+        import shutil
+        for f in glob.glob(os.path.join(tests_dir, "sim_build*")):
+            shutil.rmtree(f)
+
+    else:
+        sim_build = args.pop("sim_build")
+        waves = args.pop("waves")
+        force_compile = args.pop("force_compile")
+
+        run_test(args, sim_build, waves, force_compile)
+
+    # import click
+
+    # @click.group(invoke_without_command=True)
+    # @click.option('--data_width', type=int, default=32)
+    # @click.option('--addr_width', type=int, default=16)
+    # @click.option('--strb_width', type=int)
+    # @click.option('--pipeline_output', type=bool, default=False)
+    # @click.option('--waves', type=bool)
+    # @click.option('--sim_build', type=str, default="sim_build")
+    # @click.option('--force_compile', type=bool, default=True)
+    # @click.pass_context
+    # def cli(ctx, waves, sim_build, force_compile, **kwargs):
+    #     if ctx.invoked_subcommand is not None:
+    #         return
+    #     run_test(parameters=kwargs, sim_build=sim_build, waves=waves, force_compile=force_compile)
+
+    # @cli.command()
+    # def clean():
+    #     import glob
+    #     import shutil
+    #     for f in glob.glob(os.path.join(tests_dir, "sim_build*")):
+    #         shutil.rmtree(f)
+
+    # cli()
