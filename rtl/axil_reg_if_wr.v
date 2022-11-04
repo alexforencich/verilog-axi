@@ -133,16 +133,17 @@ end
 always @(posedge clk) begin
     timeout_count_reg <= timeout_count_next;
 
-    s_axil_awaddr_reg <= s_axil_awaddr_next;
-    s_axil_awvalid_reg <= s_axil_awvalid_next;
-    s_axil_wdata_reg <= s_axil_wdata_next;
-    s_axil_wstrb_reg <= s_axil_wstrb_next;
-    s_axil_wvalid_reg <= s_axil_wvalid_next;
-    s_axil_bvalid_reg <= s_axil_bvalid_next;
+    if (!rst) begin
+        s_axil_awaddr_reg <= s_axil_awaddr_next;
+        s_axil_awvalid_reg <= s_axil_awvalid_next;
+        s_axil_wdata_reg <= s_axil_wdata_next;
+        s_axil_wstrb_reg <= s_axil_wstrb_next;
+        s_axil_wvalid_reg <= s_axil_wvalid_next;
+        s_axil_bvalid_reg <= s_axil_bvalid_next;
 
-    reg_wr_en_reg <= reg_wr_en_next;
+        reg_wr_en_reg <= reg_wr_en_next;
 
-    if (rst) begin
+    end else begin
         s_axil_awvalid_reg <= 1'b0;
         s_axil_wvalid_reg <= 1'b0;
         s_axil_bvalid_reg <= 1'b0;
