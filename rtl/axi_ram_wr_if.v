@@ -28,6 +28,9 @@ THE SOFTWARE.
 `timescale 1ns / 1ps
 `default_nettype none
 
+/* verilator lint_off WIDTH */
+/* verilator lint_off CASEINCOMPLETE */
+
 /*
  * AXI4 RAM write interface
  */

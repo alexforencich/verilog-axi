@@ -104,7 +104,9 @@ always @* begin
     if (!s_axil_arvalid_reg) begin
         s_axil_araddr_next = s_axil_araddr;
         s_axil_arvalid_next = s_axil_arvalid;
+        /* verilator lint_off WIDTH */
         timeout_count_next = TIMEOUT-1;
+        /* verilator lint_on WIDTH */
     end
 
     if (reg_rd_en && !reg_rd_wait && timeout_count_reg != 0)begin

@@ -114,7 +114,9 @@ always @* begin
     if (!s_axil_awvalid_reg) begin
         s_axil_awaddr_next = s_axil_awaddr;
         s_axil_awvalid_next = s_axil_awvalid;
+        /* verilator lint_off WIDTH */
         timeout_count_next = TIMEOUT-1;
+        /* verilator lint_on WIDTH */
     end
 
     if (!s_axil_wvalid_reg) begin
