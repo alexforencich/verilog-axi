@@ -40,7 +40,7 @@ module axil_ram #
     // Width of wstrb (width of data bus in words)
     parameter STRB_WIDTH = (DATA_WIDTH/8),
     // Extra pipeline register on output
-    parameter PIPELINE_OUTPUT = 0
+    parameter PIPELINE_OUTPUT = 1
 )
 (
     input  wire                   clk,
@@ -100,6 +100,7 @@ assign s_axil_rvalid = PIPELINE_OUTPUT ? s_axil_rvalid_pipe_reg : s_axil_rvalid_
 
 integer i, j;
 
+`ifndef FORMAL
 initial begin
     // two nested loops for smaller number of iterations per loop
     // workaround for synthesizer complaints about large loop counts
@@ -109,6 +110,7 @@ initial begin
         end
     end
 end
+`endif
 
 always @* begin
     mem_wr_en = 1'b0;
@@ -120,10 +122,12 @@ always @* begin
     if (s_axil_awvalid && s_axil_wvalid && (!s_axil_bvalid || s_axil_bready) && (!s_axil_awready && !s_axil_wready)) begin
         s_axil_awready_next = 1'b1;
         s_axil_wready_next = 1'b1;
-        s_axil_bvalid_next = 1'b1;
-
         mem_wr_en = 1'b1;
     end
+
+    if (s_axil_awvalid && s_axil_wvalid && (!s_axil_bvalid || s_axil_bready) && (s_axil_awready && s_axil_wready))
+        s_axil_bvalid_next = 1'b1;
+
 end
 
 always @(posedge clk) begin
