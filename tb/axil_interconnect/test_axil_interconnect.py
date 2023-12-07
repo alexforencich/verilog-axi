@@ -224,7 +224,7 @@ def test_axil_interconnect(request, s_count, m_count, data_width):
     wrapper_file = os.path.join(tests_dir, f"{wrapper}.v")
     if not os.path.exists(wrapper_file):
         subprocess.Popen(
-            [os.path.join(rtl_dir, f"{dut}_wrap.py"), "-p", f"{s_count}", f"{m_count}"],
+            ["python3", os.path.join(rtl_dir, f"{dut}_wrap.py"), "-p", f"{s_count}", f"{m_count}"],
             cwd=tests_dir
         ).wait()
 

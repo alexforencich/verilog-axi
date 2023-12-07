@@ -71,7 +71,7 @@ endif
 include $(shell cocotb-config --makefiles)/Makefile.sim
 
 $(WRAPPER).v: ../../rtl/$(DUT)_wrap.py
-	$< -p $(PARAM_S_COUNT) $(PARAM_M_COUNT)
+	python3 $< -p $(PARAM_S_COUNT) $(PARAM_M_COUNT)
 
 iverilog_dump.v:
 	echo 'module iverilog_dump();' > $@
