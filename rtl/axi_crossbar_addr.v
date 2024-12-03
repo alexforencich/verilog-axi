@@ -365,6 +365,7 @@ always @* begin
                     m_decerr_next = 1'b1;
                     m_wc_valid_next = WC_OUTPUT;
                     m_rc_valid_next = 1'b1;
+                    trans_start = 1'b1;
                     state_next = STATE_DECODE;
                 end
             end else begin
