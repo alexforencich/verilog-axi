@@ -303,7 +303,7 @@ reg [2:0] state_reg = STATE_IDLE, state_next;
 
 reg match;
 
-reg [CL_M_COUNT-1:0] m_select_reg = 2'd0, m_select_next;
+reg [(CL_M_COUNT > 0 ? CL_M_COUNT-1 : 0):0] m_select_reg = 2'd0, m_select_next;
 reg [ID_WIDTH-1:0] axi_id_reg = {ID_WIDTH{1'b0}}, axi_id_next;
 reg [ADDR_WIDTH-1:0] axi_addr_reg = {ADDR_WIDTH{1'b0}}, axi_addr_next;
 reg axi_addr_valid_reg = 1'b0, axi_addr_valid_next;
