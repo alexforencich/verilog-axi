@@ -6,6 +6,10 @@ For more information and updates: http://alexforencich.com/wiki/en/verilog/axi/s
 
 GitHub repository: https://github.com/alexforencich/verilog-axi
 
+## Deprecation Notice
+
+This repository is superseded by https://github.com/fpganinja/taxi.  All new features and bug fixes will be applied there, and commercial support is also available.  As a result, this repo is deprecated and will not receive any future maintenance or support.
+
 ## Introduction
 
 Collection of AXI4 and AXI4 lite bus components.  Most components are fully
