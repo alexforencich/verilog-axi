@@ -378,9 +378,9 @@ registers can be individually bypassed.
 ### Source Files
 
     rtl/arbiter.v                   : Parametrizable arbiter
-    rtl/axi_adapter.v               : AXI lite width converter
-    rtl/axi_adapter_rd.v            : AXI lite width converter (read)
-    rtl/axi_adapter_wr.v            : AXI lite width converter (write)
+    rtl/axi_adapter.v               : AXI width converter
+    rtl/axi_adapter_rd.v            : AXI width converter (read)
+    rtl/axi_adapter_wr.v            : AXI width converter (write)
     rtl/axi_axil_adapter.v          : AXI to AXI lite converter
     rtl/axi_axil_adapter_rd.v       : AXI to AXI lite converter (read)
     rtl/axi_axil_adapter_wr.v       : AXI to AXI lite converter (write)
