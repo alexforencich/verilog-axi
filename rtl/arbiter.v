@@ -24,6 +24,9 @@ THE SOFTWARE.
 
 // Language: Verilog 2001
 
+// verilator lint_off WIDTH
+// verilator lint_off LITENDIAN
+
 `resetall
 `timescale 1ns / 1ps
 `default_nettype none

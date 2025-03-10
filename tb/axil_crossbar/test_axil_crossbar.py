@@ -242,9 +242,6 @@ def test_axil_crossbar(request, s_count, m_count, data_width):
 
     parameters = {}
 
-    parameters['S_COUNT'] = s_count
-    parameters['M_COUNT'] = m_count
-
     parameters['DATA_WIDTH'] = data_width
     parameters['ADDR_WIDTH'] = 32
     parameters['STRB_WIDTH'] = parameters['DATA_WIDTH'] // 8
