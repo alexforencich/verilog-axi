@@ -335,7 +335,7 @@ always @* begin
 
                 if (s_axi_wready && s_axi_wvalid) begin
                     m_axil_wdata_next = {(AXIL_WORD_WIDTH/AXI_WORD_WIDTH){s_axi_wdata}};
-                    m_axil_wstrb_next = s_axi_wstrb << (addr_reg[AXIL_ADDR_BIT_OFFSET-1:AXI_ADDR_BIT_OFFSET] * AXI_STRB_WIDTH);
+                    m_axil_wstrb_next = s_axi_wstrb << (addr_reg[AXIL_ADDR_BIT_OFFSET-1 -: AXI_ADDR_BIT_OFFSET] * AXI_STRB_WIDTH);
                     m_axil_wvalid_next = 1'b1;
                     burst_next = burst_reg - 1;
                     burst_active_next = burst_reg != 0;
@@ -354,13 +354,13 @@ always @* begin
                     if (CONVERT_NARROW_BURST) begin
                         for (i = 0; i < AXI_WORD_WIDTH; i = i + 1) begin
                             if (s_axi_wstrb[i]) begin
-                                data_next[addr_reg[AXIL_ADDR_BIT_OFFSET-1:AXI_ADDR_BIT_OFFSET]*SEGMENT_DATA_WIDTH+i*AXIL_WORD_SIZE +: AXIL_WORD_SIZE] = s_axi_wdata[i*AXIL_WORD_SIZE +: AXIL_WORD_SIZE];
-                                strb_next[addr_reg[AXIL_ADDR_BIT_OFFSET-1:AXI_ADDR_BIT_OFFSET]*SEGMENT_STRB_WIDTH+i] = 1'b1;
+                                data_next[addr_reg[AXIL_ADDR_BIT_OFFSET-1 -: AXI_ADDR_BIT_OFFSET]*SEGMENT_DATA_WIDTH+i*AXIL_WORD_SIZE +: AXIL_WORD_SIZE] = s_axi_wdata[i*AXIL_WORD_SIZE +: AXIL_WORD_SIZE];
+                                strb_next[addr_reg[AXIL_ADDR_BIT_OFFSET-1 -: AXI_ADDR_BIT_OFFSET]*SEGMENT_STRB_WIDTH+i] = 1'b1;
                             end
                         end
                     end else begin
-                        data_next[addr_reg[AXIL_ADDR_BIT_OFFSET-1:AXI_ADDR_BIT_OFFSET]*SEGMENT_DATA_WIDTH +: SEGMENT_DATA_WIDTH] = s_axi_wdata;
-                        strb_next[addr_reg[AXIL_ADDR_BIT_OFFSET-1:AXI_ADDR_BIT_OFFSET]*SEGMENT_STRB_WIDTH +: SEGMENT_STRB_WIDTH] = s_axi_wstrb;
+                        data_next[addr_reg[AXIL_ADDR_BIT_OFFSET-1 -: AXI_ADDR_BIT_OFFSET]*SEGMENT_DATA_WIDTH +: SEGMENT_DATA_WIDTH] = s_axi_wdata;
+                        strb_next[addr_reg[AXIL_ADDR_BIT_OFFSET-1 -: AXI_ADDR_BIT_OFFSET]*SEGMENT_STRB_WIDTH +: SEGMENT_STRB_WIDTH] = s_axi_wstrb;
                     end
                     m_axil_wdata_next = data_next;
                     m_axil_wstrb_next = strb_next;
@@ -451,8 +451,8 @@ always @* begin
                 if (s_axi_wready && s_axi_wvalid) begin
                     data_next = s_axi_wdata;
                     strb_next = s_axi_wstrb;
-                    m_axil_wdata_next = s_axi_wdata >> (addr_reg[AXI_ADDR_BIT_OFFSET-1:AXIL_ADDR_BIT_OFFSET] * AXIL_DATA_WIDTH);
-                    m_axil_wstrb_next = s_axi_wstrb >> (addr_reg[AXI_ADDR_BIT_OFFSET-1:AXIL_ADDR_BIT_OFFSET] * AXIL_STRB_WIDTH);
+                    m_axil_wdata_next = s_axi_wdata >> (addr_reg[AXI_ADDR_BIT_OFFSET-1 -: AXIL_ADDR_BIT_OFFSET] * AXIL_DATA_WIDTH);
+                    m_axil_wstrb_next = s_axi_wstrb >> (addr_reg[AXI_ADDR_BIT_OFFSET-1 -: AXIL_ADDR_BIT_OFFSET] * AXIL_STRB_WIDTH);
                     m_axil_wvalid_next = 1'b1;
                     burst_next = burst_reg - 1;
                     burst_active_next = burst_reg != 0;
@@ -469,8 +469,8 @@ always @* begin
                 s_axi_wready_next = 1'b0;
 
                 if (!m_axil_wvalid || m_axil_wready) begin
-                    m_axil_wdata_next = data_reg >> (addr_reg[AXI_ADDR_BIT_OFFSET-1:AXIL_ADDR_BIT_OFFSET] * AXIL_DATA_WIDTH);
-                    m_axil_wstrb_next = strb_reg >> (addr_reg[AXI_ADDR_BIT_OFFSET-1:AXIL_ADDR_BIT_OFFSET] * AXIL_STRB_WIDTH);
+                    m_axil_wdata_next = data_reg >> (addr_reg[AXI_ADDR_BIT_OFFSET-1 -: AXIL_ADDR_BIT_OFFSET] * AXIL_DATA_WIDTH);
+                    m_axil_wstrb_next = strb_reg >> (addr_reg[AXI_ADDR_BIT_OFFSET-1 -: AXIL_ADDR_BIT_OFFSET] * AXIL_STRB_WIDTH);
                     m_axil_wvalid_next = 1'b1;
                     addr_next = (addr_reg + (1 << master_burst_size_reg)) & ({ADDR_WIDTH{1'b1}} << master_burst_size_reg);
                     last_segment_next = addr_next[burst_size_reg] != addr_reg[burst_size_reg];
