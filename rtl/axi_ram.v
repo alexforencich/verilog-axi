@@ -226,7 +226,7 @@ always @* begin
                         s_axi_bid_next = write_id_reg;
                         s_axi_bvalid_next = 1'b1;
                         s_axi_awready_next = 1'b1;
-                        write_state_next = WRITE_STATE_IDLE;
+                        write_state_next = WRITE_STATE_RESP;
                     end else begin
                         write_state_next = WRITE_STATE_RESP;
                     end
