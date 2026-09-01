@@ -638,7 +638,7 @@ always @(posedge clk) begin
         out_seg_offset_reg <= 0;
         output_offset_reg <= 0;
         out_seg_consumed_reg <= 0;
-        input_valid_int_next <= 1'b0;
+        input_valid_int_reg <= 1'b0;
         out_ctrl_en_reg <= 1'b0;
     end
 end
